@@ -1,0 +1,20 @@
+#!/bin/bash
+# rails version: {{ .versions.rails }} | {{ (index .packages.linux "rails_build") | join "," }}
+set -euo pipefail
+
+{{- if eq .chezmoi.os "darwin" }}
+brew install {{ (index .packages.darwin "rails_build") | join " " }}
+{{- else if eq .chezmoi.os "linux" }}
+sudo apt-get install -y {{ (index .packages.linux "rails_build") | join " " }}
+{{- end }}
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - bash)"
+
+echo "gem: --no-document" > ~/.gemrc
+gem install bundler
+
+if ! gem list -i rails -v "{{ .versions.rails }}" >/dev/null 2>&1; then
+  gem install rails -v "{{ .versions.rails }}"
+fi
+rbenv rehash

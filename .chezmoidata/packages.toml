@@ -1,0 +1,18 @@
+[packages.linux]
+system = [
+  "git", "curl", "autoconf", "bison", "build-essential",
+  "libssl-dev", "libyaml-dev", "libreadline-dev", "zlib1g-dev",
+  "libncurses5-dev", "libffi-dev", "libgdbm6", "libgdbm-dev", "libdb-dev",
+]
+rails_build = [
+  "libsqlite3-dev", "sqlite3", "libxml2-dev", "libxslt1-dev",
+  "libcurl4-openssl-dev", "software-properties-common",
+]
+nodejs = ["nodejs", "yarn"]
+mysql = ["mysql-server", "mysql-client", "libmysqlclient-dev"]
+
+[packages.darwin]
+system = ["git", "autoconf", "bison", "openssl", "readline", "zlib"]
+rails_build = ["libxml2", "libxslt", "sqlite3"]
+nodejs = ["node", "yarn"]
+mysql = ["mysql"]

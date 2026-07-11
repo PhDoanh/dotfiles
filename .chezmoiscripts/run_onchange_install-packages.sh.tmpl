@@ -1,5 +1,0 @@
-{{- if eq .chezmoi.os "darwin" }}
-brew install rbenv git
-{{- else if eq .chezmoi.os "linux" }}
-sudo apt update && sudo apt install -y rbenv git
-{{- end }}

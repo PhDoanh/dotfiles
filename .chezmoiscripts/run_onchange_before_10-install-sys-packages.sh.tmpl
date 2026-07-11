@@ -1,0 +1,10 @@
+#!/bin/bash
+# installation list: {{ .packages | get .chezmoi.os | get "system" | join "," }}
+set -euo pipefail
+
+{{- if eq .chezmoi.os "darwin" }}
+brew install {{ (index .packages.darwin "system") | join " " }}
+{{- else if eq .chezmoi.os "linux" }}
+sudo apt-get update
+sudo apt-get install -y {{ (index .packages.linux "system") | join " " }}
+{{- end }}

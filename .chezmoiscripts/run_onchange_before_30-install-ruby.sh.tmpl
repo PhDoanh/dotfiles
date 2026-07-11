@@ -1,0 +1,11 @@
+#!/bin/bash
+# ruby version: {{ .versions.ruby }}
+set -euo pipefail
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - bash)"
+
+if ! rbenv versions --bare | grep -q "^{{ .versions.ruby }}$"; then
+  rbenv install {{ .versions.ruby }}
+fi
+rbenv global {{ .versions.ruby }}

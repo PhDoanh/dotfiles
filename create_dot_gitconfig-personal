@@ -1,5 +1,5 @@
 [user]
-  email = {{ .personalEmail }}
+  email = {{ .mail.personal }}
 
 [core]
 	editor = code --wait

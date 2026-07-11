@@ -36,11 +36,13 @@ encryption = "age"
   ]
 
 [age]
-  identity = "~/key.txt"
-  recipient = "age10vyeu4ygtsqux7xak3dtswh9qhhv8xfv8a8g237huq23acqp4ujqhvazsc" # public key
+  identity = "~/.config/chezmoi/key.txt"
+  recipient = "age1yjlws4g2f2p5z6gvchcy7zcdzdhvs4xkdz6rm5v2vlmmx9n0zfss9znuwa" # public key
 
 [git]
   autoCommit = true
+  autoPush = true
+  commitMessageTemplate = "{{ promptString \"Commit message\" \"chore: update dotfiles\" }}"
 
 [github]
   refreshPeriod = "12h"
