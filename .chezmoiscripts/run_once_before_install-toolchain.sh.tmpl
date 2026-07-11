@@ -1,0 +1,62 @@
+#!/bin/bash
+set -euo pipefail
+
+install_packages() {
+  {{- if eq .chezmoi.os "darwin" }}
+  brew install git mysql-client openssl readline zlib
+  {{- else if eq .chezmoi.os "linux" }}
+  sudo apt update
+  sudo apt install -y git mysql-client build-essential libssl-dev libreadline-dev zlib1g-dev
+  {{- end }}
+}
+
+install_rbenv() {
+  if [ ! -d "$HOME/.rbenv" ]; then
+    git clone https://github.com/rbenv/rbenv.git "$HOME/.rbenv"
+    git clone https://github.com/rbenv/ruby-build.git "$HOME/.rbenv/plugins/ruby-build"
+  else
+    echo "rbenv already installed, skipping clone"
+  fi
+}
+
+install_ruby() {
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init - bash)"
+
+  if ! rbenv versions --bare | grep -q "^3.2.2$"; then
+    rbenv install 3.2.2
+  else
+    echo "Ruby 3.2.2 already installed, skipping"
+  fi
+  rbenv global 3.2.2
+}
+
+install_rails() {
+  if ! gem list -i rails -v "7.0.7" >/dev/null 2>&1; then
+    gem install rails -v "~> 7.0.7"
+  else
+    echo "Rails 7.0.7 already installed, skipping"
+  fi
+}
+
+install_packages
+install_rbenv
+install_ruby
+install_rails
+
+install_ohmyzsh() {
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    git clone --depth=1 --branch master https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+  else
+    echo "Oh My Zsh already installed, skipping"
+  fi
+}
+
+install_p10k() {
+  local p10k_dir="$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+  if [ ! -d "$p10k_dir" ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$p10k_dir"
+  else
+    echo "Powerlevel10k already installed, skipping"
+  fi
+}

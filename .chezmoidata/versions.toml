@@ -1,0 +1,5 @@
+rubyVersion = "3.3.11"
+railsVersion = "8.1.3"
+mysqlVersion = "8.0.46"
+nodeVersion = "22.22.3"
+npmVersion = "10.9.8"

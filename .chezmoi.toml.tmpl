@@ -1,0 +1,46 @@
+encryption = "age"
+
+{{- $isEphemeral := false -}} {{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
+{{- $isHeadless := false -}}  {{/* true if this machine does not have a screen and keyboard */}}
+{{- $isWork := promptBoolOnce . "isWork" "Is this a Sun* work machine" -}}
+{{- "" -}}
+
+{{- $osID := .chezmoi.os -}}
+{{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
+{{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vscode") -}}
+{{-   $isEphemeral = true -}}
+{{-   $isHeadless = true -}}
+{{- end -}}
+
+{{- $hostname := .chezmoi.hostname -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $hostname := output "scutil" "--get" "LocalHostName" | trim -}}
+{{- end }}
+
+[data]
+  isWork = {{ $isWork }}
+  isEphemeral = {{ $isEphemeral }}
+  isHeadless = {{ $isHeadless }}
+  hostname = {{ $hostname | quote }}
+  osid = {{ $osID | quote }}
+  zshPlugins = [
+    "git",
+    "rails",
+    "rbenv",
+    "opencode",
+    "zsh-autosuggestions",
+    "zsh-syntax-highlighting",
+  ]
+
+[age]
+  identity = "~/key.txt"
+  recipient = "age10vyeu4ygtsqux7xak3dtswh9qhhv8xfv8a8g237huq23acqp4ujqhvazsc" # public key
+
+[git]
+  autoCommit = true
+
+[github]
+  refreshPeriod = "12h"

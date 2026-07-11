@@ -1,0 +1,15 @@
+[user]
+  name = phdoanh
+  email = {{ .personalEmail }}
+
+[color]
+	ui = auto
+
+[includeIf "gitdir:~/projects/sun-asterisk/"]
+  path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/projects/"]
+  path = ~/.gitconfig-personal
+
+[init]
+	defaultBranch = main

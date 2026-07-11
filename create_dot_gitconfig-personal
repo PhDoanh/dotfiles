@@ -1,0 +1,7 @@
+[user]
+  email = {{ .personalEmail }}
+
+[core]
+	editor = code --wait
+	autocrlf = false
+	eol = lf
