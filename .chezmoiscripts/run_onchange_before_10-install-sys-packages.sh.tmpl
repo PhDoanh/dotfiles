@@ -1,5 +1,5 @@
 #!/bin/bash
-# installation list: {{ .packages | get .chezmoi.os | get "system" | join "," }}
+# installation list: {{ (index .packages .chezmoi.os "system") | join "," }}
 set -euo pipefail
 
 {{- if eq .chezmoi.os "darwin" }}
