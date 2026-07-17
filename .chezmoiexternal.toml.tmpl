@@ -14,6 +14,13 @@
     executable = true
     path = "uv-x86_64-unknown-linux-gnu/uv"
 
+[".opencode/bin/opencode"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "anomalyco/opencode" "opencode-linux-x64.tar.gz" | quote }}
+    refreshPeriod = "72h"
+    executable = true
+    path = "opencode-linux-x64.tar.gz"
+
 {{- end }}
 
 {{- if and (not .isEphemeral) (not .isHeadless) }}
