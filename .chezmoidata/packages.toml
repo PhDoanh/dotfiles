@@ -8,7 +8,7 @@ rails_build = [
   "libsqlite3-dev", "sqlite3", "libxml2-dev", "libxslt1-dev",
   "libcurl4-openssl-dev", "software-properties-common",
 ]
-nodejs = ["nodejs", "yarn"]
+nodejs = ["nodejs", "npm"]
 mysql = ["mysql-server", "mysql-client", "libmysqlclient-dev"]
 
 [packages.darwin]

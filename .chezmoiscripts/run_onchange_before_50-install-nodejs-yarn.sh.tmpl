@@ -16,4 +16,5 @@ run_as_root() {
 brew install {{ (index .packages.darwin "nodejs") | join " " }}
 {{- else if eq .chezmoi.os "linux" }}
 run_as_root apt-get install -y {{ (index .packages.linux "nodejs") | join " " }}
+run_as_root npm install -g yarn
 {{- end }}
