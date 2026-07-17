@@ -2,8 +2,18 @@
 # installation list: {{ (index .packages.linux "nodejs") | join "," }}
 set -euo pipefail
 
+run_as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  else
+    command -v sudo >/dev/null 2>&1 ||
+      { echo "sudo is required when not running as root" >&2; exit 1; }
+    sudo "$@"
+  fi
+}
+
 {{- if eq .chezmoi.os "darwin" }}
 brew install {{ (index .packages.darwin "nodejs") | join " " }}
 {{- else if eq .chezmoi.os "linux" }}
-sudo apt-get install -y {{ (index .packages.linux "nodejs") | join " " }}
+run_as_root apt-get install -y {{ (index .packages.linux "nodejs") | join " " }}
 {{- end }}
