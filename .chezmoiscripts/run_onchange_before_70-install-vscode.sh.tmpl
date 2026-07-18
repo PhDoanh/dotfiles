@@ -1,0 +1,118 @@
+#!/bin/bash
+# install vscode (darwin/linux; cli-only on headless/ephemeral machines)
+set -euo pipefail
+
+run_as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  else
+    command -v sudo >/dev/null 2>&1 || {
+      echo "sudo is required when not running as root" >&2
+      exit 1
+    }
+    sudo "$@"
+  fi
+}
+
+has_cmd() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+install_vscode_cli_linux() {
+  local arch
+  arch="$(dpkg --print-architecture)"
+
+  case "$arch" in
+    amd64) arch="x64" ;;
+    arm64) arch="arm64" ;;
+    armhf) arch="armhf" ;;
+    *)
+      echo "Unsupported Debian architecture for VS Code CLI: $arch" >&2
+      exit 1
+      ;;
+  esac
+
+  local install_dir="/usr/local/lib/vscode-cli"
+  local bin_path="/usr/local/bin/code"
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  trap 'rm -rf "$tmp_dir"' EXIT
+
+  curl -fsSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-${arch}" -o "${tmp_dir}/code.tar.gz"
+  run_as_root mkdir -p "$install_dir"
+  run_as_root tar -xzf "${tmp_dir}/code.tar.gz" -C "$install_dir" --strip-components=1
+  run_as_root ln -sf "${install_dir}/bin/code" "$bin_path"
+}
+
+install_vscode_full_linux() {
+  run_as_root mkdir -p /etc/apt/keyrings
+
+  if [ ! -f /etc/apt/keyrings/microsoft.gpg ]; then
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+      | gpg --dearmor \
+      | run_as_root tee /etc/apt/keyrings/microsoft.gpg >/dev/null
+    run_as_root chmod go+r /etc/apt/keyrings/microsoft.gpg
+  fi
+
+  cat <<'EOF' | run_as_root tee /etc/apt/sources.list.d/vscode.sources >/dev/null
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64 arm64 armhf
+Signed-By: /etc/apt/keyrings/microsoft.gpg
+EOF
+
+  run_as_root apt-get update
+  run_as_root apt-get install -y code
+}
+
+install_vscode_cli_darwin() {
+  if ! has_cmd brew; then
+    echo "Homebrew is required on darwin" >&2
+    exit 1
+  fi
+
+  brew install visual-studio-code-cli
+}
+
+install_vscode_full_darwin() {
+  if ! has_cmd brew; then
+    echo "Homebrew is required on darwin" >&2
+    exit 1
+  fi
+
+  brew install --cask visual-studio-code
+}
+
+{{- $cliOnly := or .data.isHeadless .data.isEphemeral -}}
+
+{{- if eq .chezmoi.os "darwin" }}
+if {{ if $cliOnly }}true{{ else }}false{{ end }}; then
+  install_vscode_cli_darwin
+  echo "VS Code CLI installed on darwin (headless/ephemeral mode)."
+else
+  install_vscode_full_darwin
+  echo "Visual Studio Code installed on darwin."
+fi
+
+{{- else if eq .chezmoi.os "linux" }}
+if ! has_cmd apt-get; then
+  echo "This Linux installer currently supports apt-get based distros only." >&2
+  exit 1
+fi
+
+export DEBIAN_FRONTEND=noninteractive
+
+if {{ if $cliOnly }}true{{ else }}false{{ end }}; then
+  install_vscode_cli_linux
+  echo "VS Code CLI installed on Linux (headless/ephemeral mode)."
+else
+  install_vscode_full_linux
+  echo "Visual Studio Code installed on Linux via Microsoft apt repository."
+fi
+
+{{- else }}
+echo "Unsupported OS: {{ .chezmoi.os }}" >&2
+exit 1
+{{- end }}
