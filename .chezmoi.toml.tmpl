@@ -4,6 +4,9 @@ encryption = "age"
 {{- $isEphemeral := false -}} {{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $isHeadless := false -}}  {{/* true if this machine does not have a screen and keyboard */}}
 {{- $isWork := promptBoolOnce . "isWork" "[CHEZMOI.INFO] Is this a Sun* work machine (y/n)" -}}
+{{- $personalMail := promptStringOnce . "personalMail" "[CHEZMOI.INFO] Enter your personal mail" "pgdoanh711@gmail.com" -}}
+{{- $workMail := promptStringOnce . "workMail" "[CHEZMOI.INFO] Enter your work mail" "pham.gia.doanh@sun-asterisk.com" -}}
+{{- $gitName := promptStringOnce . "gitName" "[CHEZMOI.INFO] Enter your name for Git account" "sunner" -}}
 {{- "" -}}
 
 {{- if and (eq .chezmoi.os "linux") (env "WSL_DISTRO_NAME") -}}
@@ -28,6 +31,9 @@ encryption = "age"
 [data]
   isWSL = {{ $isWSL }}
   isWork = {{ $isWork }}
+  personalMail = {{ $personalMail || quote }}
+  workMail = {{ $workMail || quote }}
+  gitName = {{ $gitName || quote }}
   isEphemeral = {{ $isEphemeral }}
   isHeadless = {{ $isHeadless }}
   hostname = {{ $hostname | quote }}
