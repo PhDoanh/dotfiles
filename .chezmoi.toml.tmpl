@@ -1,9 +1,14 @@
 encryption = "age"
 
+{{- $isWSL := false -}}
 {{- $isEphemeral := false -}} {{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $isHeadless := false -}}  {{/* true if this machine does not have a screen and keyboard */}}
 {{- $isWork := promptBoolOnce . "isWork" "[CHEZMOI.INFO] Is this a Sun* work machine (y/n)" -}}
 {{- "" -}}
+
+{{- if and (eq .chezmoi.os "linux") (env "WSL_DISTRO_NAME") -}}
+{{-   $isWSL = true -}}
+{{- end -}}
 
 {{- $osID := .chezmoi.os -}}
 {{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
@@ -21,6 +26,7 @@ encryption = "age"
 {{- end }}
 
 [data]
+  isWSL = {{ $isWSL }}
   isWork = {{ $isWork }}
   isEphemeral = {{ $isEphemeral }}
   isHeadless = {{ $isHeadless }}
