@@ -31,9 +31,9 @@ encryption = "age"
 [data]
   isWSL = {{ $isWSL }}
   isWork = {{ $isWork }}
-  personalMail = {{ $personalMail || quote }}
-  workMail = {{ $workMail || quote }}
-  gitName = {{ $gitName || quote }}
+  personalMail = {{ $personalMail | quote }}
+  workMail = {{ $workMail | quote }}
+  gitName = {{ $gitName | quote }}
   isEphemeral = {{ $isEphemeral }}
   isHeadless = {{ $isHeadless }}
   hostname = {{ $hostname | quote }}
