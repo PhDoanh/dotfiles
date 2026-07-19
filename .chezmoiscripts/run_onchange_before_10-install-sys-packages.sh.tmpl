@@ -2,7 +2,7 @@
 # installation list: {{ (index .packages .chezmoi.os "system") | join "," }}
 set -euo pipefail
 
-{{- $packages := index .packages .chezmoi.os "system" -}}
+{{ $packages := index .packages .chezmoi.os "system" -}}
 echo "[CHEZMOI.INFO] Installing system packages for {{ .chezmoi.os }}: {{ $packages | join "," }}"
 
 run_as_root() {
