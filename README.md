@@ -1,6 +1,6 @@
 # My dotfiles for work at [Sun*](https://sun-asterisk.com/)
 
-PhDoanh's dotfiles managed by [chezmoi](https://www.chezmoi.io/) - targeting macOS and Ubuntu Linux, with Sun* work-machine awareness and Docker support.
+PhDoanh's dotfiles managed by [chezmoi](https://www.chezmoi.io/) - targeting macOS and Ubuntu Linux (includes WSL2), with Sun* work-machine awareness and Docker support.
 
 ## 📦 Components
 
@@ -52,11 +52,9 @@ PhDoanh's dotfiles managed by [chezmoi](https://www.chezmoi.io/) - targeting mac
 
 Before running the initial setup, ensure the following are available on your machine:
 
-- **chezmoi**: The dotfile manager itself — install via `sh -c "$(curl -fsLS get.chezmoi.io)"`
-- **`git`**: Required by chezmoi to clone this repo
-- **`curl`**: Required by setup scripts to download packages and tools
-- **OS: Ubuntu Linux or macOS**: Scripts are conditioned on `linux-ubuntu` and `darwin`; other distros are not supported
+- **Ubuntu Linux or macOS**: Scripts are conditioned on `linux-ubuntu` and `darwin`; other distros are not supported
 - **Docker**: Required only if you want to use the Docker-based setup ([Option B](#option-b---docker-chezmoi-native)). Ensure Docker is installed and running.
+- **WSL2**: Required only if you are Windows user - install via `wsl --install` (all below operations are same to linux-ubuntu)
 
 ## 🚀 Initial Setup
 
