@@ -2,12 +2,14 @@
 # rails version: {{ .versions.rails }} | {{ (index .packages.linux "rails_build") | join "," }}
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing Rails version {{ .versions.rails }}"
+
 run_as_root() {
   if [ "$(id -u)" -eq 0 ]; then
     "$@"
   else
     command -v sudo >/dev/null 2>&1 ||
-      { echo "sudo is required when not running as root" >&2; exit 1; }
+      { echo "[CHEZMOI.ERR] sudo is required when not running as root" >&2; exit 1; }
     sudo "$@"
   fi
 }
@@ -21,6 +23,7 @@ run_as_root apt-get install -y {{ (index .packages.linux "rails_build") | join "
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - bash)"
 
+echo "[CHEZMOI.INFO] Configuring gem settings"
 echo "gem: --no-document" > ~/.gemrc
 gem install bundler
 

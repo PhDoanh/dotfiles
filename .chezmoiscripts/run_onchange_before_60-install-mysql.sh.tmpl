@@ -2,12 +2,14 @@
 # installation list: {{ (index .packages.linux "mysql") | join "," }}
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing MySQL"
+
 run_as_root() {
   if [ "$(id -u)" -eq 0 ]; then
     "$@"
   else
     command -v sudo >/dev/null 2>&1 ||
-      { echo "sudo is required when not running as root" >&2; exit 1; }
+      { echo "[CHEZMOI.ERR] sudo is required when not running as root" >&2; exit 1; }
     sudo "$@"
   fi
 }
@@ -18,4 +20,4 @@ brew install {{ (index .packages.darwin "mysql") | join " " }}
 run_as_root apt-get install -y {{ (index .packages.linux "mysql") | join " " }}
 {{- end }}
 
-echo "MySQL installed. Please set root password and create database.yml credentials manually."
+echo "[CHEZMOI.INFO] MySQL installed. Please set root password and create database.yml credentials manually."

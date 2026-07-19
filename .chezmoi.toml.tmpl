@@ -2,7 +2,7 @@ encryption = "age"
 
 {{- $isEphemeral := false -}} {{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $isHeadless := false -}}  {{/* true if this machine does not have a screen and keyboard */}}
-{{- $isWork := promptBoolOnce . "isWork" "Is this a Sun* work machine" -}}
+{{- $isWork := promptBoolOnce . "isWork" "[CHEZMOI.INFO] Is this a Sun* work machine (y/n)" -}}
 {{- "" -}}
 
 {{- $osID := .chezmoi.os -}}
@@ -42,7 +42,7 @@ encryption = "age"
 [git]
   autoCommit = true
   autoPush = true
-  commitMessageTemplate = '{{"{{"}} promptString "Commit message" "chore: update dotfiles" {{"}}"}}'
+  commitMessageTemplate = '{{"{{"}} promptString "[CHEZMOI.INFO] Commit message" "chore: update dotfiles" {{"}}"}}'
 
 [github]
   refreshPeriod = "12h"

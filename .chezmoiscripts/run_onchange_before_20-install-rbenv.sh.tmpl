@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing rbenv and Ruby build"
+
 if [ ! -d "$HOME/.rbenv" ]; then
   git clone https://github.com/rbenv/rbenv.git "$HOME/.rbenv"
   git clone https://github.com/rbenv/ruby-build.git "$HOME/.rbenv/plugins/ruby-build"
 else
-  echo "rbenv already installed, skipping clone"
+  echo "[CHEZMOI.INFO] rbenv already installed, skipping clone"
 fi

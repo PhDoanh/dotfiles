@@ -2,6 +2,8 @@
 # ruby version: {{ .versions.ruby }}
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing Ruby version {{ .versions.ruby }}"
+
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - bash)"
 

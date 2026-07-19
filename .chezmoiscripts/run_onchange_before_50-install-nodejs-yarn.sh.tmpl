@@ -2,12 +2,14 @@
 # installation list: {{ (index .packages.linux "nodejs") | join "," }}
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing Node.js and Yarn"
+
 run_as_root() {
   if [ "$(id -u)" -eq 0 ]; then
     "$@"
   else
     command -v sudo >/dev/null 2>&1 ||
-      { echo "sudo is required when not running as root" >&2; exit 1; }
+      { echo "[CHEZMOI.ERR] sudo is required when not running as root" >&2; exit 1; }
     sudo "$@"
   fi
 }

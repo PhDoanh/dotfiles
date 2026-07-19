@@ -1,10 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Decrypting private key for chezmoi"
+
 export PATH="$HOME/.local/bin:$PATH"
 
 if ! command -v chezmoi >/dev/null 2>&1; then
-    echo "chezmoi binary not found in PATH" >&2
+    echo "[CHEZMOI.ERR] chezmoi binary not found in PATH" >&2
     exit 1
 fi
 

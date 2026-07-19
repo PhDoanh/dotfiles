@@ -2,12 +2,14 @@
 # install vscode (darwin/linux; cli-only on headless/ephemeral machines)
 set -euo pipefail
 
+echo "[CHEZMOI.INFO] Installing Visual Studio Code"
+
 run_as_root() {
   if [ "$(id -u)" -eq 0 ]; then
     "$@"
   else
     command -v sudo >/dev/null 2>&1 || {
-      echo "sudo is required when not running as root" >&2
+      echo "[CHEZMOI.ERR] sudo is required when not running as root" >&2
       exit 1
     }
     sudo "$@"
@@ -27,7 +29,7 @@ install_vscode_cli_linux() {
     arm64) arch="arm64" ;;
     armhf) arch="armhf" ;;
     *)
-      echo "Unsupported Debian architecture for VS Code CLI: $arch" >&2
+      echo "[CHEZMOI.ERR] Unsupported Debian architecture for VS Code CLI: $arch" >&2
       exit 1
       ;;
   esac
@@ -69,7 +71,7 @@ EOF
 
 install_vscode_cli_darwin() {
   if ! has_cmd brew; then
-    echo "Homebrew is required on darwin" >&2
+    echo "[CHEZMOI.ERR] Homebrew is required on darwin" >&2
     exit 1
   fi
 
@@ -78,27 +80,27 @@ install_vscode_cli_darwin() {
 
 install_vscode_full_darwin() {
   if ! has_cmd brew; then
-    echo "Homebrew is required on darwin" >&2
+    echo "[CHEZMOI.ERR] Homebrew is required on darwin" >&2
     exit 1
   fi
 
   brew install --cask visual-studio-code
 }
 
-{{- $cliOnly := or .data.isHeadless .data.isEphemeral -}}
+{{- $cliOnly := or .isHeadless .isEphemeral -}}
 
 {{- if eq .chezmoi.os "darwin" }}
 if {{ if $cliOnly }}true{{ else }}false{{ end }}; then
   install_vscode_cli_darwin
-  echo "VS Code CLI installed on darwin (headless/ephemeral mode)."
+  echo "[CHEZMOI.INFO] VS Code CLI installed on darwin (headless/ephemeral mode)."
 else
   install_vscode_full_darwin
-  echo "Visual Studio Code installed on darwin."
+  echo "[CHEZMOI.INFO] Visual Studio Code installed on darwin."
 fi
 
 {{- else if eq .chezmoi.os "linux" }}
 if ! has_cmd apt-get; then
-  echo "This Linux installer currently supports apt-get based distros only." >&2
+  echo "[CHEZMOI.ERR] This Linux installer currently supports apt-get based distros only." >&2
   exit 1
 fi
 
@@ -106,13 +108,13 @@ export DEBIAN_FRONTEND=noninteractive
 
 if {{ if $cliOnly }}true{{ else }}false{{ end }}; then
   install_vscode_cli_linux
-  echo "VS Code CLI installed on Linux (headless/ephemeral mode)."
+  echo "[CHEZMOI.INFO] VS Code CLI installed on Linux (headless/ephemeral mode)."
 else
   install_vscode_full_linux
-  echo "Visual Studio Code installed on Linux via Microsoft apt repository."
+  echo "[CHEZMOI.INFO] Visual Studio Code installed on Linux via Microsoft apt repository."
 fi
 
 {{- else }}
-echo "Unsupported OS: {{ .chezmoi.os }}" >&2
+echo "[CHEZMOI.ERR] Unsupported OS: {{ .chezmoi.os }}" >&2
 exit 1
 {{- end }}
