@@ -20,6 +20,7 @@ has_cmd() {
   command -v "$1" >/dev/null 2>&1
 }
 
+tmp_dir=""
 install_vscode_cli_linux() {
   local arch
   arch="$(dpkg --print-architecture)"
@@ -36,8 +37,8 @@ install_vscode_cli_linux() {
 
   local install_dir="/usr/local/lib/vscode-cli"
   local bin_path="/usr/local/bin/code"
-  local tmp_dir="$(mktemp -d)"
-  trap 'rm -rf "$tmp_dir"' EXIT
+  tmp_dir="$(mktemp -d)"
+  trap '[[ -n "$tmp_dir" ]] && rm -rf "$tmp_dir"' EXIT
 
   curl -fsSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-${arch}" -o "${tmp_dir}/code.tar.gz"
   run_as_root mkdir -p "$install_dir"
