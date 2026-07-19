@@ -54,10 +54,10 @@ encryption = "age"
     "-c",
     'cp "$1" "$2" && code --wait --new-window --merge "$3" "$1" "$2" "$4"',
     "bash",
-    "{{ .Target }}",
-    "{{ .Target }}.base",
-    "{{ .Destination }}",
-    "{{ .Source }}",
+    '{{"{{"}} .Target {{"}}"}}',
+    '{{"{{"}} .Target {{"}}"}}.base',
+    '{{"{{"}} .Destination {{"}}"}}',
+    '{{"{{"}} .Source {{"}}"}}',
   ]
 
 [git]
