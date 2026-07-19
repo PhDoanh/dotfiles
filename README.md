@@ -2,8 +2,6 @@
 
 PhDoanh's dotfiles managed by [chezmoi](https://www.chezmoi.io/) - targeting macOS and Ubuntu Linux, with Sun* work-machine awareness and Docker support.
 
----
-
 ## 📦 Components
 
 | Component | chezmoi Source File | Destination | Description |
@@ -50,8 +48,6 @@ PhDoanh's dotfiles managed by [chezmoi](https://www.chezmoi.io/) - targeting mac
 | `run_onchange_before_60-install-mysql.sh.tmpl` | Before apply | Installs MySQL server/client |
 | `run_onchange_before_70-install-vscode.sh.tmpl` | Before apply | Installs VS Code (full GUI on non-headless, CLI-only on headless/ephemeral) |
 
----
-
 ## ✅ Prerequisites
 
 Before running the initial setup, ensure the following are available on your machine:
@@ -61,8 +57,6 @@ Before running the initial setup, ensure the following are available on your mac
 - **`curl`**: Required by setup scripts to download packages and tools
 - **OS: Ubuntu Linux or macOS**: Scripts are conditioned on `linux-ubuntu` and `darwin`; other distros are not supported
 - **Docker**: Required only if you want to use the Docker-based setup ([Option B](#option-b---docker-chezmoi-native)). Ensure Docker is installed and running.
-
----
 
 ## 🚀 Initial Setup
 
@@ -84,12 +78,10 @@ This will:
 **Step 2: Reload the shell**
 
 ```sh
-exec zsh
+exec zsh # or `chsh -s $(which zsh)` to set Zsh as default shell
 ```
 
 > **Note:** The age passphrase for `key.txt.age` will be prompted during step 4. Keep it ready.
-
----
 
 ### Option B - Docker (chezmoi native)
 
